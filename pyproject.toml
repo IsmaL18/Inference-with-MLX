@@ -1,0 +1,14 @@
+[project]
+name = "inference-with-mlx"
+version = "0.1.0"
+description = "Bac à sable et base de connaissance pour faire tourner des LLM en local avec MLX"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mlx-lm>=0.32.2",
+    "mlx-vlm>=0.7.12",
+    "openai>=3.49.0",
+]
+
+[tool.ruff]
+line-length = 120
