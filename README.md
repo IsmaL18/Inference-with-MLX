@@ -3,27 +3,29 @@
 Bac à sable et base de connaissance pour faire tourner des LLM en local sur Apple Silicon avec
 [MLX](https://github.com/ml-explore/mlx) (`mlx-lm` pour le texte, `mlx-vlm` pour la vision).
 
-## Démarrage en 3 commandes
+## Prérequis
+
+- Un Mac Apple Silicon (M1 ou plus récent).
+- [uv](https://docs.astral.sh/uv/) : `curl -LsSf https://astral.sh/uv/install.sh | sh`
+
+## Installation
+
+MLX est une dépendance du projet : rien n'est installé globalement.
 
 ```bash
-uv sync                                            # installe mlx-lm, mlx-vlm, openai dans .venv
-uv run python scripts/list_models.py               # quels modèles j'ai, et lesquels tiennent en RAM
-uv run mlx_lm.chat --model mlx-community/gemma-4-e4b-it-4bit   # discuter avec un modèle
+uv sync                            # crée .venv avec mlx-lm, mlx-vlm, openai
+uv lock --upgrade && uv sync       # plus tard, pour mettre MLX à jour
 ```
 
-## Installation : projet ou globale
+Lance ensuite chaque commande avec `uv run` (par exemple `uv run mlx_lm.chat …`), ou active
+l'environnement une fois par terminal avec `source .venv/bin/activate`.
 
-MLX est installé de deux façons sur cette machine. Elles cohabitent sans conflit.
+## Démarrage
 
-| | Dans le projet (`pyproject.toml`) | Globale (`uv tool`) |
-|---|---|---|
-| Installation | `uv sync` (déjà fait) | `uv tool install mlx-lm` et `uv tool install mlx-vlm` |
-| Usage | `uv run mlx_lm.chat …` depuis ce dossier | `mlx_lm.chat …` depuis n'importe où |
-| Python (`import mlx_lm`) | Oui | Non |
-| Mise à jour | `uv lock --upgrade && uv sync` | `uv tool upgrade mlx-lm mlx-vlm` |
-| Version actuelle | mlx-lm 0.32.2, mlx-vlm 0.7.12 | mlx-lm 0.31.3, mlx-vlm 0.4.4 |
-
-Dans ce dossier, utilise `uv run` pour que doc, scripts et CLI soient sur la même version.
+```bash
+uv run python scripts/list_models.py                            # modèles installés, et lesquels tiennent en RAM
+uv run mlx_lm.chat --model mlx-community/gemma-4-e4b-it-4bit    # discuter avec un modèle (téléchargé au 1er lancement)
+```
 
 ## Commandes essentielles
 
@@ -42,13 +44,12 @@ Le détail, les options et les exemples sont dans [docs/commandes-cli.md](docs/c
 ## RAM : l'essentiel
 
 - **RAM nécessaire ≈ poids du modèle en Go + KV cache (grandit avec le contexte) + ~1 Go.**
-- macOS ne donne au GPU que **~75 % de la RAM** : 19,1 Go sur ce Mac (M4, 24 Go).
-- Ordre de grandeur des poids : **4bit ≈ 0,56 Go par milliard de paramètres**, 8bit ≈ 1,06 Go.
-- Sur ce Mac : jusqu'à ~10 Go de poids, c'est confortable ; 10-15 Go passent en fermant les
-  apps ; au-delà de ~18 Go, ça swappe.
+- macOS ne donne au GPU qu'environ **70 à 75 % de la RAM**. C'est ce budget qui compte, pas la RAM totale.
+- Poids selon la quantification : **4bit ≈ 0,56 Go par milliard de paramètres**, 8bit ≈ 1,06 Go, bf16 = 2 Go.
+- Garde une marge : au-delà du budget GPU, macOS swappe et la génération s'effondre.
 - Un MoE (`35B-A3B`) doit tenir **en entier** en RAM, mais génère à la vitesse de ses paramètres actifs.
 
-Calculs, tableaux et réglage de la limite GPU : [docs/ram.md](docs/ram.md).
+Calculs, tableaux par quantification et réglage de la limite GPU : [docs/ram.md](docs/ram.md).
 
 ## Quels modèles sont installés ?
 
@@ -57,8 +58,8 @@ uv run python scripts/list_models.py         # modèles MLX : type, quantificati
 uv run python scripts/list_models.py --all   # tout le cache Hugging Face
 ```
 
-Ils sont stockés dans `~/.cache/huggingface/hub`. Commandes alternatives et suppression :
-[docs/modeles-installes.md](docs/modeles-installes.md).
+Les modèles sont stockés dans `~/.cache/huggingface/hub`. Commandes alternatives et
+suppression : [docs/modeles-installes.md](docs/modeles-installes.md).
 
 ## Servir un modèle en local
 
@@ -85,14 +86,14 @@ avec `base_url="http://127.0.0.1:8080/v1"`.
 uv run python examples/01_generate.py --prompt "Ta question"
 ```
 
-Modèle par défaut partout : `mlx-community/gemma-4-e4b-it-4bit` (5 Go, ~35 tokens/s sur ce Mac).
+Modèle par défaut : `mlx-community/gemma-4-e4b-it-4bit` (~5 Go). Change-le avec `--model`.
 
 ## Base de connaissance
 
 | Fiche | Contenu |
 |---|---|
 | [commandes-cli.md](docs/commandes-cli.md) | Commandes essentielles de `mlx_lm` et `mlx_vlm`, options, exemples |
-| [ram.md](docs/ram.md) | Calcul de la RAM : poids, KV cache, limite GPU, ce qui tient sur 24 Go |
+| [ram.md](docs/ram.md) | Calcul de la RAM : poids et KV cache par format, limite GPU, ce qui tient selon la machine |
 | [contexte-performance.md](docs/contexte-performance.md) | Prefill/decode, contexte, KV cache, prompt cache, mode réflexion |
-| [quantification.md](docs/quantification.md) | 8/4/3bit, mxfp4, quantifications avancées, lire un nom de modèle |
+| [quantification.md](docs/quantification.md) | De bf16 à moins de 1 bit, quantifications avancées, lire un nom de modèle |
 | [modeles-installes.md](docs/modeles-installes.md) | Où sont les modèles, comment les lister, les supprimer, les télécharger |

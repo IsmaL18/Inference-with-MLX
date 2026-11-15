@@ -32,7 +32,7 @@ les tokens réellement utilisés (voir le calcul dans [ram.md](ram.md)).
 
 | Levier | Option | Effet | Coût |
 |---|---|---|---|
-| Quantifier le KV cache | `--kv-bits 8` ou `4` (`--quantized-kv-start` : à partir de quel token) | KV cache ÷2 ou ÷4 | Légère perte de qualité ; sur le serveur, désactive le batching |
+| Quantifier le KV cache | `--kv-bits 8` ou `4` (`--quantized-kv-start` : à partir de quel token) | KV cache ÷2 ou ÷4 | Légère perte de qualité ; sur le serveur, désactive le batching ; non pris en charge par mlx_lm sur les modèles à fenêtre glissante (Gemma 3/4) |
 | Plafonner le KV cache | `--max-kv-size N` | RAM bornée : les plus vieux tokens sont oubliés (cache rotatif) | Le modèle « oublie » le début |
 | Prefill par petits lots | `--prefill-step-size 512` | Pic mémoire réduit | Prefill plus lent |
 | Réutiliser un préfixe | `mlx_lm.cache_prompt` puis `--prompt-cache-file` | Plus de prefill pour un document ou un prompt système récurrent | Fichier lié à un modèle précis |

@@ -12,7 +12,7 @@ Bac à sable et base de connaissance MLX (LLM en local sur Apple Silicon). Doc e
 
 ## Conventions
 
-- Toujours `uv run` dans ce dossier : la version du projet (pyproject) diffère de celle installée globalement par `uv tool`.
+- MLX est installé uniquement dans le projet (aucune install globale) : toujours `uv run`.
 - Toute option CLI citée dans `docs/` doit être vérifiée avec `uv run <commande> --help` sur la version du projet.
 - `scripts/mlx_models.py` est partagé par `list_models.py` et `serve.py` (lancés depuis `scripts/`, import local).
 
@@ -21,4 +21,5 @@ Bac à sable et base de connaissance MLX (LLM en local sur Apple Silicon). Doc e
 - `mlx_lm.manage --scan` filtre « mlx » en tenant compte de la casse : il rate les repos `...-MLX-...`.
 - mlx_lm contacte le Hub même pour un modèle en cache (lent hors ligne) : `HF_HUB_OFFLINE=1`.
 - Gemma 4 / Qwen 3 réfléchissent par défaut : `enable_thinking=False` dans le chat template.
+- `--kv-bits` échoue sur les modèles à fenêtre glissante (Gemma 3/4) : `RotatingKVCache Quantization NYI`.
 - `mlx_vlm.server` écoute sur 0.0.0.0 par défaut : toujours passer `--host 127.0.0.1`.

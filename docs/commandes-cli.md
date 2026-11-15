@@ -3,9 +3,8 @@
 Options vérifiées sur `mlx-lm` 0.32.2 et `mlx-vlm` 0.7.12 (versions du projet).
 Pour tout le reste : `<commande> --help`.
 
-Dans ce dossier, préfixe par `uv run` (version du projet). Ailleurs, les commandes
-globales installées par `uv tool` marchent sans préfixe (version 0.31.3 chez toi, un peu
-plus ancienne : `--image`, `--prefill-step-size` et `--kv-bits` côté serveur n'y sont pas).
+MLX n'est installé que dans ce projet : préfixe chaque commande par `uv run` (ou active
+l'environnement avec `source .venv/bin/activate`).
 
 Toutes les commandes prennent `--model` : un repo Hugging Face (`mlx-community/gemma-4-e4b-it-4bit`,
 téléchargé au premier appel) ou un chemin local. Sans `--model`, `generate` et `benchmark`
@@ -29,7 +28,7 @@ echo "Résume ce texte : ..." | uv run mlx_lm.generate --model <repo> -p -    # 
 | `--temp`, `--top-p`, `--top-k`, `--min-p` | Échantillonnage. `--temp 0` = déterministe |
 | `--seed` | Graine, pour des résultats reproductibles |
 | `--max-kv-size` | Plafonne le KV cache (en tokens) : borne la RAM sur les longs contextes |
-| `--kv-bits 4` / `8` | Quantifie le KV cache : divise sa RAM par 4 ou 2 |
+| `--kv-bits 8` / `4` (2 à 8) | Quantifie le KV cache : divise sa RAM par ~2 ou ~3,5. Échoue sur les modèles à fenêtre glissante (Gemma 3/4) |
 | `--prefill-step-size` | Taille des lots du prefill. Plus petit = pic mémoire plus bas, plus lent |
 | `--prompt-cache-file` | Réutilise un long préfixe pré-calculé (voir `mlx_lm.cache_prompt`) |
 | `--draft-model` | Décodage spéculatif avec un petit modèle de la même famille |
