@@ -17,7 +17,7 @@ Le decode relit tous les poids actifs à chaque token. D'où l'ordre de grandeur
 Un M4 de base offre ~120 Go/s, un M4 Pro ~270 Go/s, un M4 Max ~410-546 Go/s. Conséquences :
 - un modèle 2× plus petit (4bit au lieu de 8bit) génère presque 2× plus vite ;
 - un MoE `A3B` génère à la vitesse d'un modèle de ~3B, même s'il en pèse 35B en RAM ;
-- mesuré sur ton M4 avec `gemma-4-e4b-it-4bit` : ~35 tokens/s en génération.
+- mesuré sur ton M3 avec `gemma-4-e4b-it-4bit` : ~35 tokens/s en génération.
 
 ## La fenêtre de contexte
 
@@ -47,7 +47,8 @@ uv run mlx_lm.generate --prompt-cache-file doc.safetensors -p "Résume la sectio
 ```
 
 `mlx_lm.server` fait ça automatiquement entre les tours d'une même conversation
-(`--prompt-cache-size`, `--prompt-cache-bytes`).
+(`--prompt-cache-size`, `--prompt-cache-bytes`). Sans plafond en octets, il peut saturer la RAM :
+voir [serveur-agent-cache.md](serveur-agent-cache.md).
 
 ## Le mode « réflexion »
 

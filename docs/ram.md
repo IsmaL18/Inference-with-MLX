@@ -11,7 +11,7 @@ tourne autour de **70 à 75 % de la RAM** :
 | RAM du Mac | Budget GPU approximatif |
 |---|---|
 | 16 Go | ~11 Go |
-| 24 Go | **19,1 Go** (mesuré sur ton M4) |
+| 24 Go | **19,1 Go** (mesuré sur ton M3) |
 | 32 Go | ~22-24 Go |
 | 64 Go | ~48 Go |
 | 128 Go | ~96 Go |
@@ -132,7 +132,7 @@ sont dans [contexte-performance.md](contexte-performance.md).
 Pendant le traitement d'un long prompt, les activations intermédiaires ajoutent un pic
 temporaire. `--prefill-step-size 512` le réduit, au prix d'un prefill plus lent.
 
-## Ce qui tient sur ton Mac (M4, 24 Go, budget GPU 19,1 Go)
+## Ce qui tient sur ton Mac (M3, 24 Go, budget GPU 19,1 Go)
 
 Hypothèse : contexte modéré (quelques milliers de tokens), autres apps légères.
 

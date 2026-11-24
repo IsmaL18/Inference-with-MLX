@@ -81,6 +81,7 @@ avec `base_url="http://127.0.0.1:8080/v1"`.
 | `examples/01_generate.py` | `load` + `generate`, chat template, échantillonnage |
 | `examples/02_stream.py` | `stream_generate` : affichage token par token et métriques |
 | `examples/03_openai_client.py` | Appeler le serveur local avec le SDK OpenAI, en streaming |
+| `examples/04_prompt_cache_agent.py` | Simuler un agent de code et mesurer le prompt cache (tokens en cache, latence) |
 
 ```bash
 uv run python examples/01_generate.py --prompt "Ta question"
@@ -95,5 +96,6 @@ Modèle par défaut : `mlx-community/gemma-4-e4b-it-4bit` (~5 Go). Change-le ave
 | [commandes-cli.md](docs/commandes-cli.md) | Commandes essentielles de `mlx_lm` et `mlx_vlm`, options, exemples |
 | [ram.md](docs/ram.md) | Calcul de la RAM : poids et KV cache par format, limite GPU, ce qui tient selon la machine |
 | [contexte-performance.md](docs/contexte-performance.md) | Prefill/decode, contexte, KV cache, prompt cache, mode réflexion |
+| [serveur-agent-cache.md](docs/serveur-agent-cache.md) | Servir un agent de code : prompt cache borné, budget RAM d'un Mac 24 Go |
 | [quantification.md](docs/quantification.md) | De bf16 à moins de 1 bit, quantifications avancées, lire un nom de modèle |
 | [modeles-installes.md](docs/modeles-installes.md) | Où sont les modèles, comment les lister, les supprimer, les télécharger |
